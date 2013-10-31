@@ -18,7 +18,7 @@ inputFileName:	push	h
 		call	printString
 
 		; Удалим из имени файла все левые символы
-		call	correctFileName
+		call	printFileName2
 
 loc_C873:	; Восстановить курсор строки
 		call	popCursorLine

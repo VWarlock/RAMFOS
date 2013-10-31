@@ -16,7 +16,7 @@ ALL_CHARS		= 1		; 0	 Печать всех символов знакогенератора через ESC
 RKS_LOADER		= 1		; 0      Запускать RKS файлы
 BIG_ROM			= 1		; 0 	 Использовать все 64 Кб ПЗУ Специалиста МХ2 под ROM-диск
 WORK_WITHOUT_ARAM	= 1		; 0      Если ДОЗУ не найдено, то использовать буфер в ОЗУ размером с эму переменную
-ROM_PAGE_START		= 01800h	; 04000h Первый байт страницы ПЗУ
+ROM_PAGE_START		= 01880h	; 04000h Первый байт страницы ПЗУ
 ROM_PAGE_END		= 0FFF0h	; 0C000h Последний байт страницы ПЗУ + 1
 CURSOR_BLINK_SPEED	= 767		; 767    Задержка мигания курсора
 ARAM_MAX_PAGE           = 0Fh		; 6      Максимальное кол-во страниц расширенной памяти (макс 0Fh)
@@ -180,7 +180,7 @@ v_tapePresets:
 .include "c800.inc"
 .include "cmp_hl_de.inc"
 .include "inputFileName.inc"
-.include "correctFileName.inc"
+.include "printFileName.inc"
 .include "printCharA.inc"
 .include "biosInit.inc"
 .include "printString.inc"
@@ -255,7 +255,12 @@ miniPageEnd:
 
 a_lat:		.db 04Ch, 041h, 054h, 0 ; "LAT"
 a_rus:		.db 0F2h, 0F5h,	0F3h, 0	; "РУС"
-a_inputFileName:.db 11h, 0C6h, 0C1h, 0CAh, 0CCh, 3Ah, 8Dh, 7, 0 ; "файл" + запоминание курсора строки
+a_inputFileName:
+#if NICE
+		.db ' ', 0C6h, 0C1h, 0CAh, 0CCh, 3Ah, ' ', C_PUSHCURSORL, 0 ; "файл" + запоминание курсора строки
+#else
+		.db 11h, 0C6h, 0C1h, 0CAh, 0CCh, 3Ah, C_PUSHCURSORL, C_BEEP, 0 ; "файл" + запоминание курсора строки
+#endif
 
 A_INPUTDATE
 A_INITSCREEN

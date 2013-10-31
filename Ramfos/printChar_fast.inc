@@ -103,6 +103,17 @@ printChar_0:	; Если cursorX >= 190, то перевод строки
 		cpi	190
 		cnc	cursorCrLf
 
+		; Не позволяем снимать инверсию в служебных строках
+                lda	v_screenHeight
+		cmp	l
+		jc	printChar_u
+                lda	v_topLineHeight
+		cmp	l
+		lda	v_clearScreenByte
+		jc	printChar_i
+printChar_u:	 mvi	a, -1
+printChar_i:    sta	v_clearScreenByte2
+
 		; Увеличиваем положение курсора
 		mov	a, h
 		adi	3
@@ -124,7 +135,7 @@ printChar_0:	; Если cursorX >= 190, то перевод строки
 		; Дублировать строку?
 		XRA	A
 		ORA	M
-		LDA	v_clearScreenByte
+		LDA	v_clearScreenByte2
 		JP	drawCharDbl		
 		 XRA	M
 drawCharDbl:
@@ -166,7 +177,7 @@ printCharS6_0:	 RAR
 		 DCR	D
 		 INX	D
 		 INX	H
-		 LDA	v_clearScreenByte
+		 LDA	v_clearScreenByte2
 		 XRA	M
 		 DCR	B
 		JNZ	printCharS6_0
@@ -186,7 +197,7 @@ printCharS0_0:
 		 STAX	D
 		 INX	D
 		 INX	H
-		 LDA	v_clearScreenByte
+		 LDA	v_clearScreenByte2
 		 XRA	M
 		 DCR	B
 		JNZ	printCharS0_0
@@ -204,7 +215,7 @@ printCharS2_0:	 ANI	03Fh
 		 STAX	D
 		 INX	D
 		 INX	H
-		 LDA	v_clearScreenByte
+		 LDA	v_clearScreenByte2
 		 XRA	M
 		 DCR	B
 		JNZ	printCharS2_0
@@ -235,7 +246,7 @@ printCharS4_0:	 RAR
 		 DCR	D
 		 INX	D
 		 INX	H
-		 LDA	v_clearScreenByte
+		 LDA	v_clearScreenByte2
 		 XRA	M
 		 DCR	B
 		JNZ	printCharS4_0
@@ -245,7 +256,7 @@ printCharS4_0:	 RAR
 drawChar_ll:	DCX	H
 		XRA	A
 		ORA	M
-		LDA	v_clearScreenByte
+		LDA	v_clearScreenByte2
 		JP	drawCharDbl2
 		 XRA	M
 drawCharDbl2:	INR	B
@@ -347,3 +358,4 @@ printChar_esc3:	; Вычесть из буквы 20h
 		call	setCursorPos
 		jmp	setEscMode0
 		
+v_clearScreenByte2:	.db 0

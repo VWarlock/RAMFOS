@@ -5,36 +5,37 @@
 ; 2013-11-01 Дизассемблировано vinxru
 ;----------------------------------------------------------------------------
 
-printFileName:	; Разделитель
+printFileName:	
+		; Разделитель
 #if NICE
-		call	printStringEx
-		.db C_INVERSE, ' ', 0
+		mvi	c, ' '
 #else
+		; Разделитель
 		mvi	c, 11h
-		call	printChar
 #endif
+		call	printChar
 
-correctFileName:lxi	h, v_header2_name	; Имя
+printFileName2:lxi	h, v_header2_name	; Имя
 		mvi	b, 12			; Длина имени
-correctFileN_1:	 mov	a, m
+printFileNam_1:	 mov	a, m
 		 ; Символы меньше 0x20 заменяем на пробел
 		 cpi	20h
-		 jc	correctFileN_2
+		 jc	printFileNam_2
 		 ; Символы от 0x20 до 0x7E допускаются
 		 cpi	7Fh
-		 jc	correctFileN_3
+		 jc	printFileNam_3
 		 ; Символы от 0xC0 до 0xFF допускаются
 		 cpi	0C0h
-		 jnc	correctFileN_3		 
-correctFileN_2:	 ; Заменяем недопустимый символ на пробел
+		 jnc	printFileNam_3		 
+printFileNam_2:	 ; Заменяем недопустимый символ на пробел
 		 mvi	m, 20h
 		 mov	a, m
-correctFileN_3:	 ; Выводим символ на экран
+printFileNam_3:	 ; Выводим символ на экран
 		 call	printCharA
 		 ; Следующий символ
 		 inx	h
 		 dcr	b
-		jnz	correctFileN_1		
+		jnz	printFileNam_1		
 
 		; Разделитель
 #if NICE

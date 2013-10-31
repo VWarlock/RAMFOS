@@ -33,4 +33,4 @@ setInverseNeg:	cma
 ;----------------------------------------------------------------------------
 
 setInverse:	sta	v_clearScreenByte
-		ret
+		ret		
