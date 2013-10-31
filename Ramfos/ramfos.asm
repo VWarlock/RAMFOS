@@ -7,7 +7,6 @@ STD_RAMFOS = 0				; Скомпилировать стандартный RAMFOS
 
 DATE_IN_RAM		= 1		; 0      Размещать дату в основной оперативной памяти (возможна работа без ДОЗУ)
 NO_ROM_ENTRY		= 1		; 0      Стандартные программы в виде файлов
-NO_BACK_LINKS		= 0		; 0	 Не использовать ссылки назад в структуре файлов
 NO_PRINTER		= 1		; 0 	 Отключить принтер
 NO_MXDOS		= 1		; 0 	 Отключить загрузку с дискеты (в частноcти MXDOS)
 SD_ENABLED		= 0		; 0      Включена поддержка SD карты
@@ -15,28 +14,27 @@ OPEN_ANY_FILE		= 1		; 0 	 Открывать файл с любым расширением (А не только TXT в 
 ALL_CHARS		= 1		; 0	 Печать всех символов знакогенератора через ESC
 RKS_LOADER		= 1		; 0      Запускать RKS файлы
 BIG_ROM			= 1		; 0 	 Использовать все 64 Кб ПЗУ Специалиста МХ2 под ROM-диск
-WORK_WITHOUT_ARAM	= 1		; 0      Если ДОЗУ не найдено, то использовать буфер в ОЗУ размером с эму переменную
+WORK_WITHOUT_ARAM	= 47		; 0      Если ДОЗУ не найдено, то использовать буфер в ОЗУ размером с эту переменную
 ROM_PAGE_START		= 01880h	; 04000h Первый байт страницы ПЗУ
 ROM_PAGE_END		= 0		; 0C000h Последний байт страницы ПЗУ + 1
 CURSOR_BLINK_SPEED	= 767		; 767    Задержка мигания курсора
-ARAM_MAX_PAGE           = 0Fh		; 6      Максимальное кол-во страниц расширенной памяти (макс 0Fh)
+ARAM_MAX_PAGE           = 0Fh		; 6      Максимальное кол-во страниц расширенной памяти (максимум 0Fh)
 ARAM_PAGE_END		= 0FFBBh        ; 0FFBBh Конец страницы ДОЗУ (36 байт неиспользуемого ОЗУ после)
-DLG_START_PAGE		= 80h		; 0      При запуске показать диск
+DLG_START_PAGE		= 80h		; 0      При запуске показать эту страницу
 INIT_SCREEN_COLOR	= 0F1h		; 100h	 Цвет, которым заливается экран при инициализации. 100h - заливается текущим цветом, который при теплой перезагрузке может быть любым.
-FAST_PRINT		= 1		;	 Быстрая функция вывода текста. Так же выводит текст строки без разрывов. И не портит цвета символов правее.
+FAST_PRINT		= 1		; 0      Быстрая функция вывода текста. Так же выводит текст строки без разрывов. И не портит цвета символов правее.
 TRUE_CHECK_ARAM		= 1		; 0      Испправленная функция определения обьема ДОЗУ
-NICE			= 1
-COLOR_SUPPORT		= 1		; 0	Установка цвета по умолчанию при очистке служебных строк и экрана
-NO_PRINT_STATUS_BUG	= 1
-DLG_CURSOR_AT_TOP	= 0
-NO_ROM_SWITCH_BUG	= 1		; 0	Можно было выбрать не нулевую страницу ПЗУ
-RELOCATE_FILE_FUNCTIONS = 1		; 0     Перенести некоторые функции из F800 в C800
+NICE			= 1		; 0	 Новый интерфейс
+COLOR_SUPPORT		= 1		; 0	 Установка цвета по умолчанию при очистке служебных строк и экрана
+NO_PRINT_STATUS_BUG	= 1		; 0	 Исправить ошибку
+DLG_CURSOR_AT_TOP	= 0		; 0	 Курсор на первом файле
+NO_ROM_SWITCH_BUG	= 1		; 0	 Можно было выбрать не нулевую страницу ПЗУ
+RELOCATE_FILE_FUNCTIONS = 1		; 0      Перенести некоторые функции из F800 в C800, иначе код не влезает
 
 #else
 
 DATE_IN_RAM		= 0
 NO_ROM_ENTRY		= 0
-NO_BACK_LINKS		= 0
 NO_PRINTER		= 0
 NO_MXDOS		= 0
 OPEN_ANY_FILE		= 0
@@ -57,8 +55,8 @@ NICE			= 0
 COLOR_SUPPORT		= 0
 NO_PRINT_STATUS_BUG	= 0
 DLG_CURSOR_AT_TOP	= 0
-RELOCATE_FILE_FUNCTIONS = 0
 NO_ROM_SWITCH_BUG	= 0
+RELOCATE_FILE_FUNCTIONS = 0
 
 #endif
 
@@ -122,9 +120,7 @@ charGen:
 
 .include "chargen.inc"
 
-keybMap:
-
-		.db 81h, 0ch, 19h, 1ah, 20h, 20h, 20h, 08h, 09h, 18h, 0ah, 0dh ; Нижняя строка клавиатуры
+keybMap:	.db 81h, 0ch, 19h, 1ah, 20h, 20h, 20h, 08h, 09h, 18h, 0ah, 0dh ; Нижняя строка клавиатуры
 v_charGenPtr:	.dw charGen
 v_keybMap:	.dw keybMap
 		.db 51h, 5Eh, 53h, 4Dh,	49h, 54h, 58h, 42h, 40h, 2Ch, 2Fh, 5Fh ; Q^SMITXB@,/_
@@ -143,9 +139,9 @@ v_cursorPos:	.dw 0			; Положение курсора в пикселях
 v_beepConfig:	.dw 0A05h
 v_oldBeep:	.dw 0
 		.db 1Bh, 8Ah, 0, 1, 2, 3, 4, 5,	6, 8Bh,	8Ch, 1Fh ; Верхняя строка клавиатуры
-v_clearScreenByte:.db 0
+v_inverse:	.db 0
 		.db 0
-v_aramMaxPageI	.db ARAM_MAX_PAGE
+v_aramMaxPageI:	.db ARAM_MAX_PAGE
 v_tapeMode:	.db '0'
 v_tapePulseB:	.dw 322Ch	; 1200 Бод
 v_tapePulseA:	.dw 1812h
@@ -255,11 +251,11 @@ miniPageEnd:
 
 a_lat:		.db 04Ch, 041h, 054h, 0 ; "LAT"
 a_rus:		.db 0F2h, 0F5h,	0F3h, 0	; "РУС"
-a_inputFileName:
+
 #if NICE
-		.db ' ', 0C6h, 0C1h, 0CAh, 0CCh, 3Ah, ' ', C_PUSHCURSORL, 0 ; "файл" + запоминание курсора строки
+a_inputFileName:.db ' ', 0C6h, 0C1h, 0CAh, 0CCh, 3Ah, ' ', C_PUSHCURSORL, 0 ; "файл" + запоминание курсора строки
 #else
-		.db 11h, 0C6h, 0C1h, 0CAh, 0CCh, 3Ah, C_PUSHCURSORL, C_BEEP, 0 ; "файл" + запоминание курсора строки
+a_inputFileName:.db 11h, 0C6h, 0C1h, 0CAh, 0CCh, 3Ah, C_PUSHCURSORL, C_BEEP, 0 ; "файл" + запоминание курсора строки
 #endif
 
 A_INPUTDATE
@@ -369,6 +365,9 @@ buffer:		.db 0,0,0,0,0,0,0,0,0	; Используется максимум 9 символов для ввода даты
 #endif
 .include "fileSetGetName.inc"
 .include "fileSetType.inc"
+#if NO_ROM_ENTRY | RKS_LOADER
+.include "exec.inc"
+#endif
 
 ; ===========================================================================
 ; ПЕРЕМЕННЫЕ
@@ -384,7 +383,7 @@ a_delete:	.db 0D5h, 0C4h,	0C1h, 0CCh, 0C9h, 0D4h,	0D8h, 0		; "удалить"
 a_load:		.db 0DEh, 0D4h,	0C5h, 0CEh, 0C9h, 0C5h,	0		; "чтение"
 a_save:		.db 0DAh, 0C1h,	0D0h, 0C9h, 0D3h, 0D8h,	0		; "запись"
 a_verify:	.db 0D3h, 0D2h,	0C1h, 0D7h, 0CEh, 0C9h,	0D4h, 0D8h, 0	; "сравнить"
-a_name:		.db 0C9h, 0CDh,	0D1h, 0	; имя
+a_name:		.db 0C9h, 0CDh,	0D1h, 0					; имя
 
 ; ===========================================================================
 ; ОКНО ПРОЦЕССОРА

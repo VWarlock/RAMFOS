@@ -197,7 +197,7 @@ printIndicators:
 		lhld	v_cursorPos
 
 		; Запоминаем инверсию в стеке
-		lda	v_clearScreenByte
+		lda	v_inverse
 		ora	a
 		push	psw
 #if FAST_PRINT

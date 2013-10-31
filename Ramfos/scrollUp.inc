@@ -28,7 +28,7 @@ loc_CD5A:	 push	h
 		  dcr	c
 		  cnz	memcpy_hl_de_c2
 		  ; Очищаем последние 10 байт
-		  lda	v_clearScreenByte
+		  lda	v_inverse
 		  mvi	c, 10
 loc_CD67:	   mov	m, a
 		   inr	l

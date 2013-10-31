@@ -52,8 +52,8 @@ loc_CAFF:	   push	psw
 		 dcr	b
 		jnz	loc_CAF9
 
-		; Если v_clearScreenByte не ноль
-		lda	v_clearScreenByte
+		; Если v_inverse не ноль
+		lda	v_inverse
 		ora	a
 		jz	loc_CB29
 		 ; Инвертируем байт по адресу de

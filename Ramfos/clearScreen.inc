@@ -21,7 +21,7 @@ clearScreen2:
 		mvi	b, 48
 
 		; Байт для заливки экрана
-		lda	v_clearScreenByte
+		lda	v_inverse
 		mov	d, a
 		mov	e, a
 

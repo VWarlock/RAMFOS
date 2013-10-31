@@ -46,7 +46,7 @@ scrollDown_2:	 push	h
 		  dcr	c
 		  cnz	memcpyb_hl_de_c2
 		  ; Верхние 10 линий очищаем
-		  lda	v_clearScreenByte
+		  lda	v_inverse
 		  mvi	c, 10		
 scrollDown_3:	   dcr	l
 		   mov	m, a

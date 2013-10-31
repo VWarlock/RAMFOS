@@ -33,7 +33,7 @@ j_pageWriteAny:		jmp	pageWriteAny
 			jmp	fileFind
 			jmp	fileLoad
 			jmp	fileDelete
-#if NO_ROM_ENTRY
+#if NO_ROM_ENTRY | RKS_LOADER
 #if NO_MXDOS
 			jmp	init
 #else

@@ -11,7 +11,7 @@
 ;   f_fileSize     - Длина файла с заголовком
 ;   f_nextFile     - Адрес следующего файла в ДОЗУ
 ;
-;   Если не включено NO_BACK_LINKS, в ДОЗУ по адресу v_curFile + f_fileSize 
+;   Если не включено в ДОЗУ по адресу v_curFile + f_fileSize 
 ;   записывается v_curFile
 ;
 ; 2013-11-01 Дизассемблировано vinxru
@@ -37,10 +37,6 @@ fileLoadHeader2:; Длина файла без заголовка
 		xchg
 		dad	d
 
-#if NO_BACK_LINKS
-		inx	h
-		inx	h
-#else
 		; Обновляем в ДОЗУ указатель на наш файл, который находится
 		; перед следующим файлом.
 		mov	c, e
@@ -49,7 +45,7 @@ fileLoadHeader2:; Длина файла без заголовка
 		mov	c, d
 		call	pageWrite
 		inx	h
-#endif
+
 		; Адрес следующего файла
 		; f_nextFile =  v_curFile + f_fileSize + 2
 		shld	f_nextFile

@@ -18,7 +18,7 @@ clearTopLine2:	lxi	d, 0A0Ah	; строка 10, высота 10
 ; 2013-11-01 Дизассемблировано vinxru
 ;----------------------------------------------------------------------------
 
-clearLine:	lda	v_clearScreenByte
+clearLine:	lda	v_inverse
 		mvi	h, 90h			; Адрес
 		mvi	b, 48			; Кол-во столбцов
 clearRect_0:	 mov	l, d

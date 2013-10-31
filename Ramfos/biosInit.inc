@@ -10,7 +10,7 @@ biosInit:	; Очистка переменных начиная с v_dblClear
 		lxi	h, v_dblClear
 		mvi	b, 47
 		xra	a
-		sta	v_clearScreenByte
+		sta	v_inverse
 loc_C8EA:	 mov	m, a
 		 inx	h
 		 dcr	b

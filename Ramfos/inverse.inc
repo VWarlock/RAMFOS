@@ -6,7 +6,7 @@
 ; 2013-11-01 Дизассемблировано vinxru
 ;----------------------------------------------------------------------------
 
-changeInverse:	lda	v_clearScreenByte
+changeInverse:	lda	v_inverse
 
 ;----------------------------------------------------------------------------
 ; RAMFOS
@@ -32,5 +32,5 @@ setInverseNeg:	cma
 ; 2013-11-01 Дизассемблировано vinxru
 ;----------------------------------------------------------------------------
 
-setInverse:	sta	v_clearScreenByte
+setInverse:	sta	v_inverse
 		ret		

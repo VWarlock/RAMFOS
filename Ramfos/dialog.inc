@@ -238,23 +238,10 @@ dlg_up:		; Если это первая строка, то перейти на предыдущую страницу
 		cpi	3
 		jz	dlg_pageChanged
 
-#if NO_BACK_LINKS
-		; filePrev2 ожидает значение в стеке
-		push	h
-		; Стираем курсор, так как filePrev2 перезагрузит заголовок
-		call	printFileHeaderDark
-.include	"filePrev2.inc"
-		; Уничтожаем значение в стеке
-		pop	d
-		; Сохраняем адрес файла
-		push	h
-		; Пропускаем стирание курсора
-		jmp	dlg_upDownInt2
-#else	
 .include	"filePrev.inc"
+
 		; Сохраняем адрес файла
 		push	b
-#endif
 
 dlg_upDownInt:	; Стираем курсор
 		call	printFileHeaderDark
@@ -335,7 +322,7 @@ dlg_enter:	call	dlg_isLastLine
 		jc	dlg_enter_0
 #endif	
 
-.include "exec.inc"
+.include "rks.inc"
 
 		; Допускаются только расширения EXE и COM
 		lxi	h, a_exe		; "EXE"
