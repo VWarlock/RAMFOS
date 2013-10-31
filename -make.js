@@ -55,7 +55,7 @@ kill("SpecialistMX2.bin");
 
 // Загрузчик на нулевой странице
 
-page0start = encode[0x31] + encode[0xFF] + encode[0xF7] + encode[0xC7]; // lxi	sp, 0F7FFh / rst 0
+page0start = encode[0x31] + encode[0xFF] + encode[0xF7] + encode[0xC7]; // lxi sp, 0F7FFh / rst 0
 
 // Компиляция загрузчика
 
