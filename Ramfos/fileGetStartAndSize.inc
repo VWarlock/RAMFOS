@@ -11,4 +11,5 @@ fileGetStartAndSize:
 		lhld	v_header2_start
 		xchg
 		lhld	v_header2_end
-		; Продолжение на subHlDe
+
+		; Продолжение на sub_hl_de
