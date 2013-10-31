@@ -7,14 +7,15 @@
 
 .org 0                      
 		jmp	loader
-.org 8000h - 8
+.org 8000h - 9
 loader:
-		mvi	a, 0C7h	; RST0
-		sta	08000h
+		lxi	sp, 08000h
+		mvi	b, 0C7h	; RST0
+		push	b
 		sta	0F7FEh
 
 #if $ != 8000h
 Ошибка
 #endif
-		; RST 0
+		rst	0
 .end

@@ -8,3 +8,5 @@
 
 vinxru
 aleksey.f.morozov@gmail.com
+
+INIT_SCREEN_COLOR может быть равным 100h

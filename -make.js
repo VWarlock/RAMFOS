@@ -10,7 +10,7 @@
 unmlzOffset	= 0x0063;
 ramfosOffset	= 0x0430;
 romdiskOffset	= 0x1800;
-romdiskSize	= 0x10000-0x1800-11; // -romdiskOffset - page0start.length - page0end.length
+romdiskSize	= 0x10000-0x1800-12; // -romdiskOffset - page0start.length - page0end.length
 loader1Offset	= 0x8000;
 
 // Стандартная ерунда
@@ -55,9 +55,10 @@ kill("SpecialistMX2.bin");
 
 // Загрузчик на нулевой странице
 
-page0start = encode[0xC3] + encode[0xF8] + encode[0x7F]; // jmp 07FF8h
-page0end   = encode[0x3E] + encode[0xC7];		 // mvi	a, "rst 0"
-page0end  += encode[0x32] + encode[0x00] + encode[0x80]; // sta 08000h
+page0start = encode[0xC3] + encode[0xF7] + encode[0x7F]; // jmp 07FF8h
+page0end   = encode[0x31] + encode[0x00] + encode[0x90]; // lxi sp, 08000h
+page0end  += encode[0x06] + encode[0xC7];                // mvi b, "RST0"
+page0end  += encode[0xC5];                               // push b
 page0end  += encode[0x32] + encode[0xFE] + encode[0xF7]; // sta	0F7FEh
 
 // Компиляция загрузчика
