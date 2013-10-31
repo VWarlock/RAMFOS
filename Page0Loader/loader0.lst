@@ -6,16 +6,6 @@
 0006   0000             ;----------------------------------------------------------------------------
 0007   0000             
 0008   0000             .org 0                      
-0009   0000 C3 F7 7F    		jmp	loader
-0010   7FF7             .org 8000h - 9
-0011   7FF7             loader:
-0012   7FF7 31 00 80    		lxi	sp, 08000h
-0013   7FFA 06 C7       		mvi	b, 0C7h	; RST0
-0014   7FFC C5          		push	b
-0015   7FFD 32 FE F7    		sta	0F7FEh
-0016   8000             
-0017   8000~            #if $ != 8000h
-0018   8000~            Ошибка
-0019   8000             #endif
-0020   8000 C7          		rst	0
-0021   8001             .endtasm: Number of errors = 0
+0009   0000 31 FF F7    		lxi	sp, 0F7FFh
+0010   0003 C7          		rst	0
+0011   0004             .endtasm: Number of errors = 0

@@ -17,7 +17,7 @@
 0017   0000             BIG_ROM			= 1		; 0 	 €бЇ®«м§®ў вм ўбҐ 64 ЉЎ Џ‡“ ‘ЇҐжЁ «Ёбв  Њ•2 Ї®¤ ROM-¤ЁбЄ
 0018   0000             WORK_WITHOUT_ARAM	= 1		; 0      …б«Ё „Ћ‡“ ­Ґ ­ ©¤Ґ­®, в® ЁбЇ®«м§®ў вм ЎгдҐа ў Ћ‡“ а §¬Ґа®¬ б н¬г ЇҐаҐ¬Ґ­­го
 0019   0000             ROM_PAGE_START		= 01880h	; 04000h ЏҐаўл© Ў ©в бва ­Ёжл Џ‡“
-0020   0000             ROM_PAGE_END		= 0FFF0h	; 0C000h Џ®б«Ґ¤­Ё© Ў ©в бва ­Ёжл Џ‡“ + 1
+0020   0000             ROM_PAGE_END		= 0		; 0C000h Џ®б«Ґ¤­Ё© Ў ©в бва ­Ёжл Џ‡“ + 1
 0021   0000             CURSOR_BLINK_SPEED	= 767		; 767    ‡ ¤Ґа¦Є  ¬ЁЈ ­Ёп Єгаб®а 
 0022   0000             ARAM_MAX_PAGE           = 0Fh		; 6      Њ ЄбЁ¬ «м­®Ґ Є®«-ў® бва ­Ёж а биЁаҐ­­®© Ї ¬пвЁ (¬ Єб 0Fh)
 0023   0000             ARAM_PAGE_END		= 0FFBBh        ; 0FFBBh Љ®­Ґж бва ­Ёжл „Ћ‡“ (36 Ў ©в ­ҐЁбЇ®«м§гҐ¬®Ј® Ћ‡“ Ї®б«Ґ)
@@ -1129,7 +1129,7 @@
 0014+  C869 E5          		push	h
 0015+  C86A             
 0016+  C86A              		; Выводим сообщение на экран и сохраним курсор строки
-0017+  C86A 21 97 D1    		lxi	h, a_inputFileName
+0017+  C86A 21 98 D1    		lxi	h, a_inputFileName
 0018+  C86D CD 4B C9    		call	printString
 0019+  C870             
 0020+  C870             		; Удалим из имени файла все левые символы
@@ -1332,8 +1332,8 @@
 0077+  C930             		; ДОЗУ не найдено
 0078+  C930             #if WORK_WITHOUT_ARAM
 0079+  C930             		 ; Настраиваем небольшой диск в основном ОЗУ
-0080+  C930 11 6D D1    		 lxi	d, miniPage
-0081+  C933 21 8E D1    		 lxi	h, miniPageEnd
+0080+  C930 11 6E D1    		 lxi	d, miniPage
+0081+  C933 21 8F D1    		 lxi	h, miniPageEnd
 0082+  C936 3E FC       		 mvi	a, 0FCh		; Порт выбора ОЗУ
 0083+  C938 32 CA FF    		 sta	disableARAM1+1
 0084+  C93B 32 D9 FF    		 sta	disableARAM2+1
@@ -1349,7 +1349,7 @@
 0094+  C945 22 1E C6    		shld	v_aramPageStart
 0095+  C948             #endif
 0096+  C948             		; *** Инициализация экрана ***
-0097+  C948 21 A7 D1    		lxi	h, a_initScreen
+0097+  C948 21 A8 D1    		lxi	h, a_initScreen
 0098+  C94B             		; Далее printString
 0099+  C94B             
 0100+  C94B             
@@ -1474,7 +1474,7 @@
 0006+  C990             ;----------------------------------------------------------------------------
 0007+  C990             
 0008+  C990             inputDate:	; Вывод приглашения "V3.1/дата:" или "дата:"
-0009+  C990 21 A0 D1    		lxi	h, a_inputDate
+0009+  C990 21 A1 D1    		lxi	h, a_inputDate
 0010+  C993 CD 4B C9    		call	printString
 0011+  C996             	
 0012+  C996             		; Ввод даты
@@ -1590,9 +1590,9 @@
 0060+  C9DC             
 0061+  C9DC             		; Выводим РУС/LAT
 0062+  C9DC 2C          		inr	l
-0063+  C9DD 21 8F D1    		lxi	h, a_lat
+0063+  C9DD 21 90 D1    		lxi	h, a_lat
 0064+  C9E0 C2 E6 C9    		jnz	loc_C9E2
-0065+  C9E3 21 93 D1    		  lxi	h, a_rus
+0065+  C9E3 21 94 D1    		  lxi	h, a_rus
 0066+  C9E6 CD 4B C9    loc_C9E2:	call	printString
 0067+  C9E9             
 0068+  C9E9             		; Выводим KOI8/7
@@ -3886,7 +3886,7 @@
 0011+  D127             		; Если в HL было число < 8000h, то переходим к чтению ПЗУ MX
 0012+  D127 7C          		mov	a, h
 0013+  D128 EE 80       		xri	80h
-0014+  D12A FA 46 D1    		jm	bigRom_0
+0014+  D12A FA 47 D1    		jm	bigRom_0
 0015+  D12D             
 0016+  D12D             		; Сохраняем HL и вычитаем из него 8000h
 0017+  D12D E5          		push	h
@@ -3895,152 +3895,153 @@
 0020+  D12F 23          		 inx	h
 0021+  D130 23          		 inx	h
 0022+  D131 23          		 inx	h
-0023+  D132             		 ; Включаем ПЗУ СТД
-0024+  D132 32 FF FF    		 sta	IO_PAGE_STD
-0025+  D135 AF          		 xra	a
-0026+  D136 32 F8 F7    		 sta	IO_COLOR-800h
-0027+  D139             		 ; Чтение байта
-0028+  D139 4E          		 mov	c, m
-0029+  D13A             		 ; Включение ОЗУ MX и восстановление цвета
-0030+  D13A 32 FC F7    		 sta	IO_PAGE_RAM-800h
-0031+  D13D 3A 35 D2    		 lda	v_color
-0032+  D140 32 F8 FF    		 sta	IO_COLOR
-0033+  D143 E1          		pop	h
-0034+  D144             		; Восстанавливаем в A значение
-0035+  D144 F1          		pop	psw
-0036+  D145 C9          		ret
-0037+  D146             		
-0038+  D146             bigRom_0:	; Включение ПЗУ MX
-0039+  D146 32 FE FF    		sta	IO_PAGE_ROM
-0040+  D149             		; Чтение байта
-0041+  D149 4E          		mov	c, m
-0042+  D14A             		; Включение ОЗУ MX
-0043+  D14A 32 FC FF    		sta	IO_PAGE_RAM
-0044+  D14D             		; Восстанавливаем в A значение
-0045+  D14D F1          		pop	psw
-0046+  D14E C9          		ret      
-0047+  D14F             #endif0239   D14F             #if RELOCATE_FILE_FUNCTIONS
-0240   D14F             .include "fileSaveHeader.inc"	; Їа®¤®«¦Ґ­ЁҐ ў pageWriteBlock
-0001+  D14F             ;+---------------------------------------------------------------------------
-0002+  D14F             ; RAMFOS
-0003+  D14F             ; Записать заговлок текущего файла на диск
-0004+  D14F             ;
-0005+  D14F             ; 2013-11-01 Дизассемблировано vinxru
-0006+  D14F             ;----------------------------------------------------------------------------
-0007+  D14F             
-0008+  D14F             fileSaveHeader:
-0009+  D14F             		; Устанавливаем флаг "файл не был сохранен"
-0010+  D14F 3E 8B       		mvi	a, 8Bh
-0011+  D151 32 61 D2    		sta	v_header_saved
-0012+  D154             
-0013+  D154             		; Сохранение заголовка на диск
-0014+  D154 01 52 D2    		lxi	b, v_header
-0015+  D157             		
-0016+  D157             ;----------------------------------------------------------------------------
-0017+  D157             ; RAMFOS
-0018+  D157             ; Записать альтернативный заговлок файла на диск
-0019+  D157             ; Используется для записи заговлока v_header2 при создании нового файла
-0020+  D157             ;
-0021+  D157             ; На входе
-0022+  D157             ;  b - заголовок
-0023+  D157             ;
-0024+  D157             ; 2013-11-01 Дизассемблировано vinxru
-0025+  D157             ;----------------------------------------------------------------------------
-0026+  D157             
-0027+  D157             fileSaveHeaderAny:
-0028+  D157 11 1D 00    		lxi	d, FILE_HEADER_SIZE-1
-0029+  D15A 2A 70 D2    		lhld	v_curFile
-0030+  D15D             
-0031+  D15D             		; Продолжение на pageWriteBlock
-0032+  D15D             		0241   D15D             .include "pageWriteBlock.inc"
-0001+  D15D             ;+---------------------------------------------------------------------------
-0002+  D15D             ; RAMFOS
-0003+  D15D             ; Запись блока данных в ДОЗУ/ПЗУ
-0004+  D15D             ;
-0005+  D15D             ; На входе:
-0006+  D15D             ;  bc - откуда, адрес в памяти
-0007+  D15D             ;  hl - куда, адрес в ДОЗУ/ПЗУ
-0008+  D15D             ;  de - длина-1
-0009+  D15D             ;
-0010+  D15D             ; 2013-11-01 Дизассемблировано vinxru
-0011+  D15D             ;----------------------------------------------------------------------------
-0012+  D15D             
-0013+  D15D             pageWriteBlock:	; Чтение байта
-0014+  D15D 0A          		ldax	b
-0015+  D15E             		; Запись байта
-0016+  D15E C5          		push	b
-0017+  D15F 4F          		 mov	c, a
-0018+  D160 CD D1 FF    		 call	pageWrite
-0019+  D163 C1          		pop	b
-0020+  D164             		; Увеличение адресов
-0021+  D164 23          		inx	h
-0022+  D165 03          		inx	b
-0023+  D166             		; if(de == 0) break;
-0024+  D166 7B          		mov	a, e
-0025+  D167 B2          		ora	d
-0026+  D168             		; de--
-0027+  D168 1B          		dcx	d
-0028+  D169 C2 5D D1    		jnz	pageWriteBlock
-0029+  D16C C9          		ret
-0242   D16D             #endif
-0243   D16D             
-0244   D16D             .include "v_printerXlat.inc"
-0001+  D16D             ;+---------------------------------------------------------------------------
-0002+  D16D             ; RAMFOS
-0003+  D16D             ; Таблица преобразования кодировки символов для принтера
-0004+  D16D             ;
-0005+  D16D             ; 2013-11-01 Дизассемблировано vinxru
-0006+  D16D             ;----------------------------------------------------------------------------
-0007+  D16D             
-0008+  D16D~            #if NO_PRINTER==0
-0009+  D16D~            
-0010+  D16D~            v_printerXlat:	.db 0EEh, 0D0h, 0D1h, 0E6h, 0D4h, 0D5h, 0E4h, 0D3h 
-0011+  D16D~            		.db 0E5h, 0D8h, 0D9h, 0DAh, 0DBh, 0DCh, 0DDh, 0DEh
-0012+  D16D~            		.db 0DFh, 0EFh, 0E0h, 0E1h, 0E2h, 0E3h, 0D6h, 0D2h
-0013+  D16D~            		.db 0ECh, 0EBh, 0D7h, 0E8h, 0EDh, 0E9h, 0E7h, 0EAh
-0014+  D16D~            		.db 0CEh, 0B0h, 0B1h, 0C6h, 0B4h, 0B5h, 0C4h, 0B3h 
-0015+  D16D~            		.db 0C5h, 0B8h, 0B9h, 0BAh, 0BBh, 0BCh, 0BDh, 0BEh
-0016+  D16D~            		.db 0BFh, 0CFh, 0C0h, 0C1h, 0C2h, 0C3h, 0B6h, 0B2h
-0017+  D16D~            		.db 0CCh, 0CBh, 0B7h, 0C8h, 0CDh, 0C9h, 0C7h, 0CAh
-0018+  D16D~            
-0019+  D16D             #endif0245   D16D             
-0246   D16D             ; …б«Ё ­Ґв „Ћ‡“, в® ЁбЇ®«м§гҐвбп нв®в ­ҐЎ®«ми®© ЎгдҐа, зв® Ўл е®вм зв® в®
-0247   D16D             ; а Ў®в «®.
-0248   D16D             
-0249   D16D             #if WORK_WITHOUT_ARAM != 0
-0250   D16D             miniPage:
-0251   D18E             .org $ + FILE_HEADER_SIZE + WORK_WITHOUT_ARAM + 2	; ‘®еа ­Ґ­ЁҐ д ©«  ў WORK_WITHOUT_ARAM Ў ©в
-0252   D18E             miniPageEnd:
-0253   D18E 08          .db 8							; ‘о¤  § ЇЁблў Ґвбп Ў ©в вҐа¬Ё­ в®а.
-0254   D18F             #endif
-0255   D18F             
-0256   D18F 4C 41 54 00 a_lat:		.db 04Ch, 041h, 054h, 0 ; "LAT"
-0257   D193 F2 F5 F3 00 a_rus:		.db 0F2h, 0F5h,	0F3h, 0	; "ђ“‘"
-0258   D197             a_inputFileName:
-0259   D197             #if NICE
-0260   D197 20 C6 C1 CA 		.db ' ', 0C6h, 0C1h, 0CAh, 0CCh, 3Ah, ' ', C_PUSHCURSORL, 0 ; "д ©«" + § Ї®¬Ё­ ­ЁҐ Єгаб®а  бва®ЄЁ
-0260   D19B CC 3A 20 8D 
-0260   D19F 00 
-0261   D1A0~            #else
-0262   D1A0~            		.db 11h, 0C6h, 0C1h, 0CAh, 0CCh, 3Ah, C_PUSHCURSORL, C_BEEP, 0 ; "д ©«" + § Ї®¬Ё­ ­ЁҐ Єгаб®а  бва®ЄЁ
-0263   D1A0             #endif
-0264   D1A0             
-0265   D1A0 0D C4 C1 D4 A_INPUTDATE
-0265   D1A4 C1 3A 00 
-0266   D1A7 8B 8F 20 F3 A_INITSCREEN
-0266   D1AB D0 C5 C3 C9 
-0266   D1AF C1 CC C9 D3 
-0266   D1B3 D4 20 4D 58 
-0266   D1B7 32 20 52 41 
-0266   D1BB 4D 46 4F 53 
-0266   D1BF 8C 00 
-0267   D1C1             
-0268   D1C1             ; ===========================================================================
-0269   D1C1             ; Џ…ђ…Њ…ЌЌ›…
-0270   D1C1             
-0271   D1C1~            #if $ > 0D1F0h
-0272   D1C1~            ЋиЁЎЄ _з бвм_C800_­Ґ_ў«Ґ§« 
-0273   D1C1             #endif
+0023+  D132 23          		 inx	h
+0024+  D133             		 ; Включаем ПЗУ СТД
+0025+  D133 32 FF FF    		 sta	IO_PAGE_STD
+0026+  D136 AF          		 xra	a
+0027+  D137 32 F8 F7    		 sta	IO_COLOR-800h
+0028+  D13A             		 ; Чтение байта
+0029+  D13A 4E          		 mov	c, m
+0030+  D13B             		 ; Включение ОЗУ MX и восстановление цвета
+0031+  D13B 32 FC F7    		 sta	IO_PAGE_RAM-800h
+0032+  D13E 3A 35 D2    		 lda	v_color
+0033+  D141 32 F8 FF    		 sta	IO_COLOR
+0034+  D144 E1          		pop	h
+0035+  D145             		; Восстанавливаем в A значение
+0036+  D145 F1          		pop	psw
+0037+  D146 C9          		ret
+0038+  D147             		
+0039+  D147             bigRom_0:	; Включение ПЗУ MX
+0040+  D147 32 FE FF    		sta	IO_PAGE_ROM
+0041+  D14A             		; Чтение байта
+0042+  D14A 4E          		mov	c, m
+0043+  D14B             		; Включение ОЗУ MX
+0044+  D14B 32 FC FF    		sta	IO_PAGE_RAM
+0045+  D14E             		; Восстанавливаем в A значение
+0046+  D14E F1          		pop	psw
+0047+  D14F C9          		ret      
+0048+  D150             #endif0239   D150             #if RELOCATE_FILE_FUNCTIONS
+0240   D150             .include "fileSaveHeader.inc"	; Їа®¤®«¦Ґ­ЁҐ ў pageWriteBlock
+0001+  D150             ;+---------------------------------------------------------------------------
+0002+  D150             ; RAMFOS
+0003+  D150             ; Записать заговлок текущего файла на диск
+0004+  D150             ;
+0005+  D150             ; 2013-11-01 Дизассемблировано vinxru
+0006+  D150             ;----------------------------------------------------------------------------
+0007+  D150             
+0008+  D150             fileSaveHeader:
+0009+  D150             		; Устанавливаем флаг "файл не был сохранен"
+0010+  D150 3E 8B       		mvi	a, 8Bh
+0011+  D152 32 61 D2    		sta	v_header_saved
+0012+  D155             
+0013+  D155             		; Сохранение заголовка на диск
+0014+  D155 01 52 D2    		lxi	b, v_header
+0015+  D158             		
+0016+  D158             ;----------------------------------------------------------------------------
+0017+  D158             ; RAMFOS
+0018+  D158             ; Записать альтернативный заговлок файла на диск
+0019+  D158             ; Используется для записи заговлока v_header2 при создании нового файла
+0020+  D158             ;
+0021+  D158             ; На входе
+0022+  D158             ;  b - заголовок
+0023+  D158             ;
+0024+  D158             ; 2013-11-01 Дизассемблировано vinxru
+0025+  D158             ;----------------------------------------------------------------------------
+0026+  D158             
+0027+  D158             fileSaveHeaderAny:
+0028+  D158 11 1D 00    		lxi	d, FILE_HEADER_SIZE-1
+0029+  D15B 2A 70 D2    		lhld	v_curFile
+0030+  D15E             
+0031+  D15E             		; Продолжение на pageWriteBlock
+0032+  D15E             		0241   D15E             .include "pageWriteBlock.inc"
+0001+  D15E             ;+---------------------------------------------------------------------------
+0002+  D15E             ; RAMFOS
+0003+  D15E             ; Запись блока данных в ДОЗУ/ПЗУ
+0004+  D15E             ;
+0005+  D15E             ; На входе:
+0006+  D15E             ;  bc - откуда, адрес в памяти
+0007+  D15E             ;  hl - куда, адрес в ДОЗУ/ПЗУ
+0008+  D15E             ;  de - длина-1
+0009+  D15E             ;
+0010+  D15E             ; 2013-11-01 Дизассемблировано vinxru
+0011+  D15E             ;----------------------------------------------------------------------------
+0012+  D15E             
+0013+  D15E             pageWriteBlock:	; Чтение байта
+0014+  D15E 0A          		ldax	b
+0015+  D15F             		; Запись байта
+0016+  D15F C5          		push	b
+0017+  D160 4F          		 mov	c, a
+0018+  D161 CD D1 FF    		 call	pageWrite
+0019+  D164 C1          		pop	b
+0020+  D165             		; Увеличение адресов
+0021+  D165 23          		inx	h
+0022+  D166 03          		inx	b
+0023+  D167             		; if(de == 0) break;
+0024+  D167 7B          		mov	a, e
+0025+  D168 B2          		ora	d
+0026+  D169             		; de--
+0027+  D169 1B          		dcx	d
+0028+  D16A C2 5E D1    		jnz	pageWriteBlock
+0029+  D16D C9          		ret
+0242   D16E             #endif
+0243   D16E             
+0244   D16E             .include "v_printerXlat.inc"
+0001+  D16E             ;+---------------------------------------------------------------------------
+0002+  D16E             ; RAMFOS
+0003+  D16E             ; Таблица преобразования кодировки символов для принтера
+0004+  D16E             ;
+0005+  D16E             ; 2013-11-01 Дизассемблировано vinxru
+0006+  D16E             ;----------------------------------------------------------------------------
+0007+  D16E             
+0008+  D16E~            #if NO_PRINTER==0
+0009+  D16E~            
+0010+  D16E~            v_printerXlat:	.db 0EEh, 0D0h, 0D1h, 0E6h, 0D4h, 0D5h, 0E4h, 0D3h 
+0011+  D16E~            		.db 0E5h, 0D8h, 0D9h, 0DAh, 0DBh, 0DCh, 0DDh, 0DEh
+0012+  D16E~            		.db 0DFh, 0EFh, 0E0h, 0E1h, 0E2h, 0E3h, 0D6h, 0D2h
+0013+  D16E~            		.db 0ECh, 0EBh, 0D7h, 0E8h, 0EDh, 0E9h, 0E7h, 0EAh
+0014+  D16E~            		.db 0CEh, 0B0h, 0B1h, 0C6h, 0B4h, 0B5h, 0C4h, 0B3h 
+0015+  D16E~            		.db 0C5h, 0B8h, 0B9h, 0BAh, 0BBh, 0BCh, 0BDh, 0BEh
+0016+  D16E~            		.db 0BFh, 0CFh, 0C0h, 0C1h, 0C2h, 0C3h, 0B6h, 0B2h
+0017+  D16E~            		.db 0CCh, 0CBh, 0B7h, 0C8h, 0CDh, 0C9h, 0C7h, 0CAh
+0018+  D16E~            
+0019+  D16E             #endif0245   D16E             
+0246   D16E             ; …б«Ё ­Ґв „Ћ‡“, в® ЁбЇ®«м§гҐвбп нв®в ­ҐЎ®«ми®© ЎгдҐа, зв® Ўл е®вм зв® в®
+0247   D16E             ; а Ў®в «®.
+0248   D16E             
+0249   D16E             #if WORK_WITHOUT_ARAM != 0
+0250   D16E             miniPage:
+0251   D18F             .org $ + FILE_HEADER_SIZE + WORK_WITHOUT_ARAM + 2	; ‘®еа ­Ґ­ЁҐ д ©«  ў WORK_WITHOUT_ARAM Ў ©в
+0252   D18F             miniPageEnd:
+0253   D18F 08          .db 8							; ‘о¤  § ЇЁблў Ґвбп Ў ©в вҐа¬Ё­ в®а.
+0254   D190             #endif
+0255   D190             
+0256   D190 4C 41 54 00 a_lat:		.db 04Ch, 041h, 054h, 0 ; "LAT"
+0257   D194 F2 F5 F3 00 a_rus:		.db 0F2h, 0F5h,	0F3h, 0	; "ђ“‘"
+0258   D198             a_inputFileName:
+0259   D198             #if NICE
+0260   D198 20 C6 C1 CA 		.db ' ', 0C6h, 0C1h, 0CAh, 0CCh, 3Ah, ' ', C_PUSHCURSORL, 0 ; "д ©«" + § Ї®¬Ё­ ­ЁҐ Єгаб®а  бва®ЄЁ
+0260   D19C CC 3A 20 8D 
+0260   D1A0 00 
+0261   D1A1~            #else
+0262   D1A1~            		.db 11h, 0C6h, 0C1h, 0CAh, 0CCh, 3Ah, C_PUSHCURSORL, C_BEEP, 0 ; "д ©«" + § Ї®¬Ё­ ­ЁҐ Єгаб®а  бва®ЄЁ
+0263   D1A1             #endif
+0264   D1A1             
+0265   D1A1 0D C4 C1 D4 A_INPUTDATE
+0265   D1A5 C1 3A 00 
+0266   D1A8 8B 8F 20 F3 A_INITSCREEN
+0266   D1AC D0 C5 C3 C9 
+0266   D1B0 C1 CC C9 D3 
+0266   D1B4 D4 20 4D 58 
+0266   D1B8 32 20 52 41 
+0266   D1BC 4D 46 4F 53 
+0266   D1C0 8C 00 
+0267   D1C2             
+0268   D1C2             ; ===========================================================================
+0269   D1C2             ; Џ…ђ…Њ…ЌЌ›…
+0270   D1C2             
+0271   D1C2~            #if $ > 0D1F0h
+0272   D1C2~            ЋиЁЎЄ _з бвм_C800_­Ґ_ў«Ґ§« 
+0273   D1C2             #endif
 0274   D1F0             .org 0D1F0h
 0275   D1F0             
 0276   D1F0 00 00       v_tape:		.dw 0
@@ -4493,7 +4494,7 @@
 0035++ F8CC             
 0036++ F8CC             fileSaveCom:	; Запись заголовка файла на диск по адресу v_curFile
 0037++ F8CC 01 F2 D1    		lxi	b, v_header2
-0038++ F8CF CD 57 D1    		call	fileSaveHeaderAny
+0038++ F8CF CD 58 D1    		call	fileSaveHeaderAny
 0039++ F8D2             
 0040++ F8D2             		; BC = начало файла, DE = длина файла - 1
 0041++ F8D2 E5          		push	h
@@ -4505,7 +4506,7 @@
 0047++ F8D9 E1          		pop	h
 0048++ F8DA             
 0049++ F8DA             		; Запись тела файла (запись на диск по адресу HL из памяти BC длиной DE+1)
-0050++ F8DA CD 5D D1    		call	pageWriteBlock 
+0050++ F8DA CD 5E D1    		call	pageWriteBlock 
 0051++ F8DD             
 0052++ F8DD             		; Продолжение в fileChanged		0048+  F8DD             .include "fileChanged.inc"
 0001++ F8DD             ;+---------------------------------------------------------------------------
@@ -5125,7 +5126,7 @@
 0382+  FB0D 78          		mov	a, b
 0383+  FB0E 17          		ral
 0384+  FB0F 17          		ral
-0385+  FB10 D2 4F D1    		jnc	fileSaveHeader
+0385+  FB10 D2 50 D1    		jnc	fileSaveHeader
 0386+  FB13             		
 0387+  FB13             dlg_select:	; Загрузить файл в память
 0388+  FB13 CD 4F FB    		call	fileLoadComEx
@@ -5305,7 +5306,7 @@
 0062++ FBA8 3A 59 FD    		lda	a_panelOA
 0063++ FBAB FE 4F       		cpi	'O'
 0064++ FBAD C2 B3 FB    		jnz	fileLoadHeader_0
-0065++ FBB0 21 F0 FF    		 lxi	h, ROM_PAGE_END
+0065++ FBB0 21 00 00    		 lxi	h, ROM_PAGE_END
 0066++ FBB3             fileLoadHeader_0:	
 0067++ FBB3                             ; Рассчитываем свободное место на диске
 0068++ FBB3 CD EA FD    		call	sub_hl_de
@@ -6299,7 +6300,7 @@
 0945+  FF4C             		; Продолжение в fileSaveHeader
 0946+  FF4C             
 0947+  FF4C             ; ---------------------------------------------------------------------------0364   FF4C             #if RELOCATE_FILE_FUNCTIONS
-0365   FF4C C3 4F D1    	jmp	fileSaveHeader
+0365   FF4C C3 50 D1    	jmp	fileSaveHeader
 0366   FF4F~            #else
 0367   FF4F~            .include "fileSaveHeader.inc"	; Їа®¤®«¦Ґ­ЁҐ ў pageWriteBlock
 0368   FF4F~            .include "pageWriteBlock.inc"

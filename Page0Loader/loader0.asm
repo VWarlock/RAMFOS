@@ -6,16 +6,6 @@
 ;----------------------------------------------------------------------------
 
 .org 0                      
-		jmp	loader
-.org 8000h - 9
-loader:
-		lxi	sp, 08000h
-		mvi	b, 0C7h	; RST0
-		push	b
-		sta	0F7FEh
-
-#if $ != 8000h
-Ошибка
-#endif
+		lxi	sp, 0F7FFh
 		rst	0
 .end

@@ -10,7 +10,7 @@
 unmlzOffset	= 0x0063;
 ramfosOffset	= 0x0430;
 romdiskOffset	= 0x1880;
-romdiskSize	= 0x10000-0x1800-12; // -romdiskOffset - page0start.length - page0end.length
+romdiskSize	= 0x10000-romdiskOffset-4; // 4 это page0start
 loader1Offset	= 0x8000;
 
 // Стандартная ерунда
@@ -55,11 +55,7 @@ kill("SpecialistMX2.bin");
 
 // Загрузчик на нулевой странице
 
-page0start = encode[0xC3] + encode[0xF7] + encode[0x7F]; // jmp 07FF8h
-page0end   = encode[0x31] + encode[0x01] + encode[0x80]; // lxi sp, 08000h
-page0end  += encode[0x06] + encode[0xC7];                // mvi b, "RST0"
-page0end  += encode[0xC5];                               // push b
-page0end  += encode[0x32] + encode[0xFE] + encode[0xF7]; // sta	0F7FEh
+page0start = encode[0x31] + encode[0xFF] + encode[0xF7] + encode[0xC7]; // lxi	sp, 0F7FFh / rst 0
 
 // Компиляция загрузчика
 
@@ -90,9 +86,8 @@ byte0 = encode[0];
 // Первая страница
 romdisk = loadAll("romdisk.bin");
 dest = page0start;
-dest += romdisk.substr(32768-romdiskOffset, 32768-page0start.length-page0end.length);
-while(dest.length < 0x8000-page0end.length) dest += byte0;
-dest += page0end;
+dest += romdisk.substr(32768-romdiskOffset, 32768-page0start.length);
+while(dest.length < 0x8000) dest += byte0;
 
 // Вторая страница
 dest += loadAll("loader0.bin");

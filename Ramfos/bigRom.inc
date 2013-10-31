@@ -20,6 +20,7 @@ bigRom:		push	psw
 		 inx	h
 		 inx	h
 		 inx	h
+		 inx	h
 		 ; Включаем ПЗУ СТД
 		 sta	IO_PAGE_STD
 		 xra	a

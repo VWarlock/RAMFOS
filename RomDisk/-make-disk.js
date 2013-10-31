@@ -10,7 +10,7 @@
 unmlzOffset	= 0x0063;
 ramfosOffset	= 0x0430;
 romdiskOffset	= 0x1880;
-romdiskSize	= 0x10000-0x1800-12; // -romdiskOffset - page0start.length - page0end.length
+romdiskSize	= 0x10000-4-romdiskOffset;
 loader1Offset	= 0x8000;
 
 // Стандартная ерунда
