@@ -15,11 +15,21 @@
 		call	fileLoad2
 		jnz	dlg_error
 
-		; Найти файл Monitor2.sys
+		; Адрес запуска
 		push	h
-		 lxi	h, a_monitor2_sys
-		 call	exec1
+#if RKS_SHIFT_LOADER
+		; Если нажат HP
+		lda	IO_KEYB_B		
+		ani	2
+		rz
+#endif
+		; Найти файл Monitor2.sys
+		lxi	h, a_monitor2_sys
+		call	exec1
+
+		; Адрес запуска
 		pop	h
+
 		jnz	dlg_error
 		
 		; При загрузке монитора стандартный стек будет уничтожен

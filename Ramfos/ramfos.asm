@@ -6,6 +6,7 @@ STD_RAMFOS = 0				; Скомпилировать стандартный RAMFOS
 #if STD_RAMFOS==0
 
 DATE_IN_RAM		= 1		; 0      Размещать дату в основной оперативной памяти (возможна работа без ДОЗУ)
+RKS_SHIFT_LOADER	= 1		; 0	 Если нажать SHIFT, то RKS запускается в режиме MX
 NO_ROM_ENTRY		= 1		; 0      Стандартные программы в виде файлов
 NO_PRINTER		= 1		; 0 	 Отключить принтер
 NO_MXDOS		= 1		; 0 	 Отключить загрузку с дискеты (в частноcти MXDOS)
@@ -34,6 +35,7 @@ SIZE_OPTIMIZATION	= 1		; 0      Более компактный код
 #else
 
 DATE_IN_RAM		= 0
+RKS_SHIFT_LOADER	= 0
 NO_ROM_ENTRY		= 0
 NO_PRINTER		= 0
 NO_MXDOS		= 0
@@ -237,6 +239,7 @@ v_tapePresets:
 #if RELOCATE_FILE_FUNCTIONS
 .include "fileSaveHeader.inc"	; продолжение в pageWriteBlock
 .include "pageWriteBlock.inc"
+.include "fileSetType.inc"
 #endif
 
 .include "v_printerXlat.inc"
@@ -366,7 +369,9 @@ buffer:		.db 0,0,0,0,0,0,0,0,0	; Используется максимум 9 символов для ввода даты
 .include "pageWriteBlock.inc"
 #endif
 .include "fileSetGetName.inc"
+#if RELOCATE_FILE_FUNCTIONS==0
 .include "fileSetType.inc"
+#endif
 #if NO_ROM_ENTRY | RKS_LOADER
 .include "exec.inc"
 #endif
