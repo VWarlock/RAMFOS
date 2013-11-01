@@ -9,14 +9,13 @@ DATE_IN_RAM		= 1		; 0      Размещать дату в основной оперативной памяти (возможн
 NO_ROM_ENTRY		= 1		; 0      Стандартные программы в виде файлов
 NO_PRINTER		= 1		; 0 	 Отключить принтер
 NO_MXDOS		= 1		; 0 	 Отключить загрузку с дискеты (в частноcти MXDOS)
-SD_ENABLED		= 0		; 0      Включена поддержка SD карты
 OPEN_ANY_FILE		= 1		; 0 	 Открывать файл с любым расширением (А не только TXT в редакторе)
 ALL_CHARS		= 1		; 0	 Печать всех символов знакогенератора через ESC
 RKS_LOADER		= 1		; 0      Запускать RKS файлы
 BIG_ROM			= 1		; 0 	 Использовать все 64 Кб ПЗУ Специалиста МХ2 под ROM-диск
-WORK_WITHOUT_ARAM	= 47		; 0      Если ДОЗУ не найдено, то использовать буфер в ОЗУ размером с эту переменную
+WORK_WITHOUT_ARAM	= 32		; 0      Если ДОЗУ не найдено, то использовать буфер в ОЗУ размером с эту переменную
 ROM_PAGE_START		= 01880h	; 04000h Первый байт страницы ПЗУ
-ROM_PAGE_END		= 0		; 0C000h Последний байт страницы ПЗУ + 1
+ROM_PAGE_END		= 0FFFCh	; 0C000h Последний байт страницы ПЗУ + 1
 CURSOR_BLINK_SPEED	= 767		; 767    Задержка мигания курсора
 ARAM_MAX_PAGE           = 0Fh		; 6      Максимальное кол-во страниц расширенной памяти (максимум 0Fh)
 ARAM_PAGE_END		= 0FFBBh        ; 0FFBBh Конец страницы ДОЗУ (36 байт неиспользуемого ОЗУ после)
@@ -30,6 +29,7 @@ NO_PRINT_STATUS_BUG	= 1		; 0	 Исправить ошибку
 DLG_CURSOR_AT_TOP	= 0		; 0	 Курсор на первом файле
 NO_ROM_SWITCH_BUG	= 1		; 0	 Можно было выбрать не нулевую страницу ПЗУ
 RELOCATE_FILE_FUNCTIONS = 1		; 0      Перенести некоторые функции из F800 в C800, иначе код не влезает
+SIZE_OPTIMIZATION	= 1		; 0      Более компактный код
 
 #else
 
@@ -57,6 +57,7 @@ NO_PRINT_STATUS_BUG	= 0
 DLG_CURSOR_AT_TOP	= 0
 NO_ROM_SWITCH_BUG	= 0
 RELOCATE_FILE_FUNCTIONS = 0
+SIZE_OPTIMIZATION	= 0
 
 #endif
 
@@ -202,8 +203,9 @@ v_tapePresets:
 .include "printChar.inc"
 #endif
 .include "calcCharAddr.inc"
+.include "printChar2.inc"
 #if FAST_PRINT!=1
-.include "printChar2.inc"	; продолжается в setCursorPos
+.include "printChar3.inc"	; продолжается в setCursorPos
 #endif
 .include "setCursorPos.inc"
 .include "getCursorPos.inc"

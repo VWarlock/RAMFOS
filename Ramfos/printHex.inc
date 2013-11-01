@@ -18,10 +18,10 @@ printHex:	push	psw
 		pop	psw
 printHex_1:	push	psw
 		ani	0Fh
-		cpi	0Ah
+		cpi	10
 		jm	printHex_2
-		adi	7
-printHex_2:	adi	30h ; '0'
+		 adi	7
+printHex_2:	adi	'0'
 printCharA_popret:
 		call	printCharA
 pop_psw_ret:	pop	psw
