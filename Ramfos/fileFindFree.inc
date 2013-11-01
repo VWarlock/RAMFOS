@@ -36,7 +36,7 @@ fileFindFree_0:	 ; ќпредел€ем свободное место на странице
 		 call	fileFind1
 		 
 		 ; de = расчитываем требуемый размер файла, почему то в цикле.
-		 call	fileGetStartAndSize
+		 call	fileGetStartAndSize2
 		 lxi	d, FILE_HEADER_SIZE + 3
 		 dad	d
 		 xchg		

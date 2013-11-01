@@ -317,7 +317,7 @@ v_page:		.db 0		; Текущая страница
 		.db 0,0,0,0, 0,0,0,0, 0,0,0,0
 
 ; Заголовок файла
-; Первые 15 байт (v_header, v_header_name, v_header_ext) читается функцией tapeReadHeader
+; Первые 15 байт (v_header, v_header_name, v_header_ext) читается функцией fileFromTapeCom
 ; Первые 30 байт читаются функцией fileLoadHeader
 
 

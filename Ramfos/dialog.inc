@@ -787,7 +787,7 @@ dlg_isLastLine:	lhld	v_pageFreePtr
 
 ; ---------------------------------------------------------------------------
 
-.include "fileGetStartAndSize.inc"	; fileGetStartAndSize продолжается на sub_hl_de
+.include "fileGetStartAndSize2.inc"	; fileGetStartAndSize2 продолжается на sub_hl_de
 .include "sub_hl_de.inc"
 
 ; ---------------------------------------------------------------------------
@@ -819,7 +819,7 @@ dlg_f2:		; Вывод текста "удалить"
 ; ---------------------------------------------------------------------------
 
 .include "fileDelete.inc"
-.include "tapeReadHeader.inc"
+.include "fileFromTapeCom.inc"
 
 ; ---------------------------------------------------------------------------
 
